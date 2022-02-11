@@ -1,49 +1,25 @@
 import { Button, Grid, Paper, TextField } from "@mui/material";
 import React, { useState } from "react";
-// import { useForm } from "react-hook-form";
-import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function Page2(props) {
+export default function Page2() {
+	const navigate = useNavigate();
+
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [priority, setPriority] = useState("");
 
-	// const onSubmit = (data, e) => {
-	// 	// e.preventDefault();
-	// 	// console.log("data", data);
-	// 	// console.log(data);
-
-	// 	const data1 = {
-	// 		title: title,
-	// 		description: description,
-	// 		priority: priority,
-	// 	};
-	// 	// console.log("Data", data1);
-
-	// 	let item = JSON.stringify(data1);
-	// 	console.log(item);
-	// 	SendData(item);
-	// 	// return JSON.stringify(data1);
-	// };
-
-	function SendData() {
-		const data1 = {
+	const Save = () => {
+		let localData = JSON.parse(localStorage.getItem("list"));
+		localData.push({
 			title: title,
 			description: description,
 			priority: priority,
-		};
-		// console.log("Data", data1);
-
-		let item = JSON.stringify(data1);
-		// console.log(item);
-
-		const location = useLocation();
-		location.state = item;
-		const tododata = location.state;
-		console.log(tododata);
-	}
-
-	// console.log(title);
+		});
+		console.log("localData", localData);
+		localStorage.setItem("list", JSON.stringify(localData));
+		navigate("/");
+	};
 
 	return (
 		<>
@@ -51,8 +27,17 @@ export default function Page2(props) {
 				style={{ margin: "10px auto", textAlign: "center" }}
 				elevation={24}
 			>
-				<h1 style={{ textAlign: "center" }}>Todo Application</h1>
-				<form autoComplete="off" onSubmit={SendData()}>
+				<h1>
+					<i>
+						<u>Todo Application</u>
+					</i>
+				</h1>
+				<form
+					autoComplete="off"
+					onSubmit={() => {
+						Save();
+					}}
+				>
 					<Grid
 						style={{ margin: "10px" }}
 						container
@@ -69,7 +54,9 @@ export default function Page2(props) {
 								}}
 								required
 							/>
+						</Grid>
 
+						<Grid item xs={6}>
 							<TextField
 								name="desc"
 								label="Description"
@@ -79,7 +66,9 @@ export default function Page2(props) {
 								}}
 								required
 							/>
+						</Grid>
 
+						<Grid item xs={6}>
 							<TextField
 								name="priority"
 								type="number"
@@ -92,19 +81,18 @@ export default function Page2(props) {
 							/>
 						</Grid>
 					</Grid>
-					<Link
-						to={"/"}
-						state={{ title1: title }}
-						style={{ textDecoration: "none" }}
+					{/* <Link to={"/"} style={{ textDecoration: "none" }}> */}
+					<Button
+						type="submit"
+						style={{ margin: "10px" }}
+						variant="contained"
+						// 	onClick={() => {
+						// 		Save();
+						// 	}}
 					>
-						<Button
-							type="submit"
-							style={{ margin: "10px" }}
-							variant="contained"
-						>
-							Save
-						</Button>
-					</Link>
+						Save
+					</Button>
+					{/* </Link> */}
 				</form>
 			</Paper>
 		</>
