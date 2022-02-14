@@ -6,23 +6,32 @@ import "../index.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Page1() {
-	// const location = useLocation();
 	const navigate = useNavigate();
 	const [todos, setTodos] = useState([]);
-
-	function gotoPage2() {
-		navigate("/Page2");
-	}
 
 	useEffect(() => {
 		if (localStorage.getItem("list") == null) {
 			localStorage.setItem("list", JSON.stringify([]));
 		}
 		const todo = JSON.parse(localStorage.getItem("list"));
+		localStorage.setItem("DataCount", todo.length + 1);
 		setTodos(todo);
 	}, []);
 
-	console.log(todos);
+	const handleDelete = (id) => {
+		const removeItem = todos.filter((value) => {
+			return value.id !== id;
+		});
+		localStorage.setItem("list", JSON.stringify(removeItem));
+		setTodos(removeItem);
+	};
+
+	// console.log(todos);
+
+	function gotoPage2() {
+		navigate("/Page2");
+	}
+
 	return (
 		<>
 			<Paper
@@ -31,9 +40,7 @@ export default function Page1() {
 			>
 				<div className="todoApp">
 					<h1>
-						<i>
-							<u>Todo Application</u>
-						</i>
+						<u>Todo Application</u>
 					</h1>
 					<table id="tableid">
 						<thead>
@@ -56,7 +63,7 @@ export default function Page1() {
 												<EditIcon />
 											</IconButton>
 											<IconButton aria-label="delete">
-												<DeleteIcon />
+												<DeleteIcon onClick={() => {handleDelete(value.id)}} />
 											</IconButton>
 										</td>
 									</tr>

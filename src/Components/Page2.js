@@ -5,18 +5,22 @@ import { useNavigate } from "react-router-dom";
 export default function Page2() {
 	const navigate = useNavigate();
 
+	// const [id, setId] = useState("");
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [priority, setPriority] = useState("");
 
-	const Save = () => {
+	const idCount = localStorage.getItem("DataCount");
+
+	const SaveData = () => {
 		let localData = JSON.parse(localStorage.getItem("list"));
+
 		localData.push({
+			id: idCount,
 			title: title,
 			description: description,
 			priority: priority,
 		});
-		console.log("localData", localData);
 		localStorage.setItem("list", JSON.stringify(localData));
 		navigate("/");
 	};
@@ -28,15 +32,11 @@ export default function Page2() {
 				elevation={24}
 			>
 				<h1>
-					<i>
-						<u>Todo Application</u>
-					</i>
+					<u>Todo Application</u>
 				</h1>
 				<form
 					autoComplete="off"
-					onSubmit={() => {
-						Save();
-					}}
+					onSubmit={SaveData}
 				>
 					<Grid
 						style={{ margin: "10px" }}
@@ -81,18 +81,9 @@ export default function Page2() {
 							/>
 						</Grid>
 					</Grid>
-					{/* <Link to={"/"} style={{ textDecoration: "none" }}> */}
-					<Button
-						type="submit"
-						style={{ margin: "10px" }}
-						variant="contained"
-						// 	onClick={() => {
-						// 		Save();
-						// 	}}
-					>
+					<Button type="submit" style={{ margin: "10px" }} variant="contained">
 						Save
 					</Button>
-					{/* </Link> */}
 				</form>
 			</Paper>
 		</>
