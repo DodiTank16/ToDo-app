@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Page1() {
+export default function ViewTask() {
 	const navigate = useNavigate();
 	const [todos, setTodos] = useState([]);
 
@@ -14,7 +14,6 @@ export default function Page1() {
 			localStorage.setItem("list", JSON.stringify([]));
 		}
 		const todo = JSON.parse(localStorage.getItem("list"));
-		localStorage.setItem("DataCount", todo.length + 1);
 		setTodos(todo);
 	}, []);
 
@@ -29,7 +28,7 @@ export default function Page1() {
 	// console.log(todos);
 
 	function gotoPage2() {
-		navigate("/Page2");
+		navigate("/AddTask");
 	}
 
 	return (
@@ -59,11 +58,11 @@ export default function Page1() {
 										<td>{value.description}</td>
 										<td>{value.priority}</td>
 										<td>
-											<IconButton aria-label="edit">
+											<IconButton aria-label="edit" onClick={() => {navigate(`/AddTask/${value.id}`, {state: value})}}>
 												<EditIcon />
 											</IconButton>
-											<IconButton aria-label="delete">
-												<DeleteIcon onClick={() => {handleDelete(value.id)}} />
+											<IconButton aria-label="delete" onClick={() => {handleDelete(value.id)}}>
+												<DeleteIcon />
 											</IconButton>
 										</td>
 									</tr>
