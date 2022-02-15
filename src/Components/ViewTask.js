@@ -58,10 +58,10 @@ export default function ViewTask() {
 										<td>{value.description}</td>
 										<td>{value.priority}</td>
 										<td>
-											<IconButton aria-label="edit" onClick={() => {navigate(`/AddTask/${value.id}`, {state: value})}}>
+											<IconButton style={{color: "#0083d3"}} aria-label="edit" onClick={() => {navigate(`/AddTask/${value.id}`, {state: value})}}>
 												<EditIcon />
 											</IconButton>
-											<IconButton aria-label="delete" onClick={() => {handleDelete(value.id)}}>
+											<IconButton style={{color: "red"}} aria-label="delete" onClick={() => {handleDelete(value.id)}}>
 												<DeleteIcon />
 											</IconButton>
 										</td>
