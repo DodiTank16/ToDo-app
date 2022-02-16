@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 export default function ViewTask() {
 	const navigate = useNavigate();
 	const [todos, setTodos] = useState([]);
+	// const [data, setData] = useState(JSON.parse(localStorage.getItem("list")));
+	const [deletedData, setDeletedData] = useState(null);
+	const [disable, setDisable] = React.useState(true);
 
 	useEffect(() => {
 		if (localStorage.getItem("list") == null) {
@@ -17,12 +20,38 @@ export default function ViewTask() {
 		setTodos(todo);
 	}, []);
 
-	const handleDelete = (id) => {
+	useEffect(() => {
+		setDeletedData(JSON.parse(localStorage.getItem("deletedItem")));
+	}, [localStorage.getItem("deletedItem")]);
+
+	const HandleDelete = (id) => {
 		const removeItem = todos.filter((value) => {
 			return value.id !== id;
 		});
+		const deleted = todos.filter((value) => {
+			return value.id === id;
+		});
+
 		localStorage.setItem("list", JSON.stringify(removeItem));
+		localStorage.setItem("deletedItem", JSON.stringify(deleted));
+		// console.log(deleted);
+		setDisable(false);
 		setTodos(removeItem);
+	};
+
+	const HandleDeleteItem = () => {
+		// console.log(deletedData);
+
+		let finalTodo = [...todos, ...deletedData];
+		// if (localStorage.getItem("deletedItem") === null)
+		setTodos(finalTodo)
+		localStorage.setItem("list", JSON.stringify(finalTodo));
+		console.log(finalTodo);
+		localStorage.removeItem("deletedItem");
+		setDisable(true);
+
+
+		// window.location.reload(false);
 	};
 
 	// console.log(todos);
@@ -58,10 +87,22 @@ export default function ViewTask() {
 										<td>{value.description}</td>
 										<td>{value.priority}</td>
 										<td>
-											<IconButton style={{color: "#0083d3"}} aria-label="edit" onClick={() => {navigate(`/AddTask/${value.id}`, {state: value})}}>
+											<IconButton
+												style={{ color: "#0083d3" }}
+												aria-label="edit"
+												onClick={() => {
+													navigate(`/AddTask/${value.id}`, { state: value });
+												}}
+											>
 												<EditIcon />
 											</IconButton>
-											<IconButton style={{color: "red"}} aria-label="delete" onClick={() => {handleDelete(value.id)}}>
+											<IconButton
+												style={{ color: "red" }}
+												aria-label="delete"
+												onClick={() => {
+													HandleDelete(value.id);
+												}}
+											>
 												<DeleteIcon />
 											</IconButton>
 										</td>
@@ -78,6 +119,16 @@ export default function ViewTask() {
 						}}
 					>
 						Add
+					</Button>
+					<Button
+						style={{ margin: "20px" }}
+						variant="contained"
+						onClick={() => {
+							HandleDeleteItem();
+						}}
+						disabled={disable}
+					>
+						Undo
 					</Button>
 				</div>
 			</Paper>

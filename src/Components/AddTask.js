@@ -14,7 +14,7 @@ export default function AddTask() {
 	const { id } = useParams();
 	const path = location.pathname;
 	const isAdd = path === "/AddTask";
-	console.log(path);
+	// console.log(path);
 	const [state, setState] = useState(intialValues);
 	const [data, setData] = useState(JSON.parse(localStorage.getItem("list")));
 
@@ -40,7 +40,7 @@ export default function AddTask() {
 		if (path === `/AddTask/${id}`) {
 			setState(location.state);
 		}
-	}, [location]);
+	}, [location, path, id]);
 
 	const handleChange = (e) => {
 		setState({
@@ -119,9 +119,7 @@ export default function AddTask() {
 						</Grid>
 					</Grid>
 					<Button type="submit" style={{ margin: "10px" }} variant="contained">
-					{
-						isAdd ? "Save" : "Edit"
-					}
+						{isAdd ? "Save" : "Edit"}
 					</Button>
 				</form>
 			</Paper>
